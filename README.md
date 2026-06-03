@@ -71,10 +71,3 @@ podman build -f Containerfile -t quay.io/ossrep/api-service-point .
 | `PUT`    | `/bulk`             | admin       | Bulk upsert by ESIID      |
 | `DELETE` | `/{servicePointId}` | admin       | Delete a service point    |
 
-### Ingestion Logs - `/api/v1/ingestion-logs`
-
-| Method | Path                  | Roles | Description                            |
-| ------ | --------------------- | ----- | -------------------------------------- |
-| `GET`  | `/`                   | admin | List logs (filter: `?fileName=`)       |
-| `POST` | `/`                   | admin | Create log entry (status=PROCESSING)   |
-| `PUT`  | `/{ingestionLogId}`   | admin | Update log status (COMPLETED/FAILED)   |
