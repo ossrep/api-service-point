@@ -60,16 +60,20 @@ public class ServicePointService {
                     entity.zip = servicePoint.zip();
                     entity.county = servicePoint.county();
                     entity.tdspDuns = servicePoint.tdspDuns();
-                    entity.townCode = servicePoint.townCode();
+                    entity.meterReadCycle = servicePoint.meterReadCycle();
                     entity.status = servicePoint.status();
                     entity.premiseType = servicePoint.premiseType();
                     entity.powerRegion = servicePoint.powerRegion();
                     entity.stationCode = servicePoint.stationCode();
                     entity.stationName = servicePoint.stationName();
                     entity.metered = servicePoint.metered();
-                    entity.pendingTransaction = servicePoint.pendingTransaction();
-                    entity.polr = servicePoint.polr();
-                    entity.meterType = servicePoint.meterType();
+                    entity.openServiceOrders = servicePoint.openServiceOrders();
+                    entity.polrCustomerClass = servicePoint.polrCustomerClass();
+                    entity.settlementAmsIndicator = servicePoint.settlementAmsIndicator();
+                    entity.tdspAmsIndicator = servicePoint.tdspAmsIndicator();
+                    entity.switchHoldIndicator = servicePoint.switchHoldIndicator();
+                    entity.meteredServiceType = servicePoint.meteredServiceType();
+                    entity.meteredServiceTypeDesc = servicePoint.meteredServiceTypeDesc();
                     entity.updatedAt = Instant.now();
 
                     ServicePoint updated = toDomain(entity);
@@ -109,16 +113,20 @@ public class ServicePointService {
                 entity.zip,
                 entity.county,
                 entity.tdspDuns,
-                entity.townCode,
+                entity.meterReadCycle,
                 entity.status,
                 entity.premiseType,
                 entity.powerRegion,
                 entity.stationCode,
                 entity.stationName,
                 entity.metered,
-                entity.pendingTransaction,
-                entity.polr,
-                entity.meterType,
+                entity.openServiceOrders,
+                entity.polrCustomerClass,
+                entity.settlementAmsIndicator,
+                entity.tdspAmsIndicator,
+                entity.switchHoldIndicator,
+                entity.meteredServiceType,
+                entity.meteredServiceTypeDesc,
                 entity.createdAt,
                 entity.updatedAt
         );
@@ -134,16 +142,20 @@ public class ServicePointService {
         entity.zip = domain.zip();
         entity.county = domain.county();
         entity.tdspDuns = domain.tdspDuns();
-        entity.townCode = domain.townCode();
+        entity.meterReadCycle = domain.meterReadCycle();
         entity.status = domain.status();
         entity.premiseType = domain.premiseType();
         entity.powerRegion = domain.powerRegion();
         entity.stationCode = domain.stationCode();
         entity.stationName = domain.stationName();
         entity.metered = domain.metered();
-        entity.pendingTransaction = domain.pendingTransaction();
-        entity.polr = domain.polr();
-        entity.meterType = domain.meterType();
+        entity.openServiceOrders = domain.openServiceOrders();
+        entity.polrCustomerClass = domain.polrCustomerClass();
+        entity.settlementAmsIndicator = domain.settlementAmsIndicator();
+        entity.tdspAmsIndicator = domain.tdspAmsIndicator();
+        entity.switchHoldIndicator = domain.switchHoldIndicator();
+        entity.meteredServiceType = domain.meteredServiceType();
+        entity.meteredServiceTypeDesc = domain.meteredServiceTypeDesc();
         return entity;
     }
 }

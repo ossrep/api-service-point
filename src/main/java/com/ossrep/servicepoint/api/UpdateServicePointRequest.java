@@ -13,7 +13,7 @@ public record UpdateServicePointRequest(
         String zip,
         String county,
         String tdspDuns,
-        String townCode,
+        String meterReadCycle,
         @NotNull(message = "{servicePoint.status.notNull}")
         String status,
         String premiseType,
@@ -22,9 +22,12 @@ public record UpdateServicePointRequest(
         String stationName,
         @NotNull(message = "{servicePoint.metered.notNull}")
         Boolean metered,
-        String pendingTransaction,
-        @NotNull(message = "{servicePoint.polr.notNull}")
-        Boolean polr,
-        String meterType
+        String openServiceOrders,
+        String polrCustomerClass,
+        String settlementAmsIndicator,
+        String tdspAmsIndicator,
+        String switchHoldIndicator,
+        String meteredServiceType,
+        String meteredServiceTypeDesc
 ) {
 }

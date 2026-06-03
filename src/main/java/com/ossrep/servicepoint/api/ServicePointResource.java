@@ -66,29 +66,12 @@ public class ServicePointResource {
     @APIResponse(responseCode = "201", description = "Service point created",
             content = @Content(schema = @Schema(implementation = ServicePointResponse.class)))
     public Response create(@Valid CreateServicePointRequest request) {
-        ServicePoint domain = new ServicePoint(
-                null,
-                request.esiid(),
-                request.street(),
-                request.streetLine2(),
-                request.city(),
-                request.state(),
-                request.zip(),
-                request.county(),
-                request.tdspDuns(),
-                request.townCode(),
-                request.status(),
-                request.premiseType(),
-                request.powerRegion(),
-                request.stationCode(),
-                request.stationName(),
-                request.metered(),
-                request.pendingTransaction(),
-                request.polr(),
-                request.meterType(),
-                null,
-                null
-        );
+        ServicePoint domain = toDomain(null, request.esiid(), request.street(), request.streetLine2(),
+                request.city(), request.state(), request.zip(), request.county(), request.tdspDuns(),
+                request.meterReadCycle(), request.status(), request.premiseType(), request.powerRegion(),
+                request.stationCode(), request.stationName(), request.metered(), request.openServiceOrders(),
+                request.polrCustomerClass(), request.settlementAmsIndicator(), request.tdspAmsIndicator(),
+                request.switchHoldIndicator(), request.meteredServiceType(), request.meteredServiceTypeDesc());
         ServicePoint created = servicePointService.create(domain);
         return Response.status(Response.Status.CREATED)
                 .entity(ServicePointResponse.from(created))
@@ -104,29 +87,12 @@ public class ServicePointResource {
     @APIResponse(responseCode = "404", description = "Service point not found")
     public Response update(@PathParam("servicePointId") Long servicePointId,
                            @Valid UpdateServicePointRequest request) {
-        ServicePoint domain = new ServicePoint(
-                servicePointId,
-                request.esiid(),
-                request.street(),
-                request.streetLine2(),
-                request.city(),
-                request.state(),
-                request.zip(),
-                request.county(),
-                request.tdspDuns(),
-                request.townCode(),
-                request.status(),
-                request.premiseType(),
-                request.powerRegion(),
-                request.stationCode(),
-                request.stationName(),
-                request.metered(),
-                request.pendingTransaction(),
-                request.polr(),
-                request.meterType(),
-                null,
-                null
-        );
+        ServicePoint domain = toDomain(servicePointId, request.esiid(), request.street(), request.streetLine2(),
+                request.city(), request.state(), request.zip(), request.county(), request.tdspDuns(),
+                request.meterReadCycle(), request.status(), request.premiseType(), request.powerRegion(),
+                request.stationCode(), request.stationName(), request.metered(), request.openServiceOrders(),
+                request.polrCustomerClass(), request.settlementAmsIndicator(), request.tdspAmsIndicator(),
+                request.switchHoldIndicator(), request.meteredServiceType(), request.meteredServiceTypeDesc());
         return servicePointService.update(servicePointId, domain)
                 .map(sp -> Response.ok(ServicePointResponse.from(sp)).build())
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
@@ -143,5 +109,17 @@ public class ServicePointResource {
             return Response.noContent().build();
         }
         return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    private ServicePoint toDomain(Long id, String esiid, String street, String streetLine2,
+                                  String city, String state, String zip, String county, String tdspDuns,
+                                  String meterReadCycle, String status, String premiseType, String powerRegion,
+                                  String stationCode, String stationName, Boolean metered, String openServiceOrders,
+                                  String polrCustomerClass, String settlementAmsIndicator, String tdspAmsIndicator,
+                                  String switchHoldIndicator, String meteredServiceType, String meteredServiceTypeDesc) {
+        return new ServicePoint(id, esiid, street, streetLine2, city, state, zip, county, tdspDuns,
+                meterReadCycle, status, premiseType, powerRegion, stationCode, stationName, metered,
+                openServiceOrders, polrCustomerClass, settlementAmsIndicator, tdspAmsIndicator,
+                switchHoldIndicator, meteredServiceType, meteredServiceTypeDesc, null, null);
     }
 }

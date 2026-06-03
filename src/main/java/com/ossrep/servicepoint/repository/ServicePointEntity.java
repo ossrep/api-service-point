@@ -46,8 +46,8 @@ public class ServicePointEntity {
     @Column(name = "tdsp_duns")
     public String tdspDuns;
 
-    @Column(name = "town_code")
-    public String townCode;
+    @Column(name = "meter_read_cycle")
+    public String meterReadCycle;
 
     @NotNull(message = "{servicePoint.status.notNull}")
     @Column(name = "status", nullable = false)
@@ -69,15 +69,26 @@ public class ServicePointEntity {
     @Column(name = "metered", nullable = false)
     public Boolean metered;
 
-    @Column(name = "pending_transaction")
-    public String pendingTransaction;
+    @Column(name = "open_service_orders")
+    public String openServiceOrders;
 
-    @NotNull(message = "{servicePoint.polr.notNull}")
-    @Column(name = "polr", nullable = false)
-    public Boolean polr;
+    @Column(name = "polr_customer_class")
+    public String polrCustomerClass;
 
-    @Column(name = "meter_type")
-    public String meterType;
+    @Column(name = "settlement_ams_indicator")
+    public String settlementAmsIndicator;
+
+    @Column(name = "tdsp_ams_indicator")
+    public String tdspAmsIndicator;
+
+    @Column(name = "switch_hold_indicator")
+    public String switchHoldIndicator;
+
+    @Column(name = "metered_service_type")
+    public String meteredServiceType;
+
+    @Column(name = "metered_service_type_desc")
+    public String meteredServiceTypeDesc;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     public Instant createdAt;

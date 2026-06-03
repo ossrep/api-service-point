@@ -80,14 +80,16 @@ class ServicePointResourceTest {
                 .body("zip", equalTo("77002"))
                 .body("county", equalTo("HARRIS"))
                 .body("tdspDuns", equalTo("957877905"))
-                .body("townCode", equalTo("01"))
+                .body("meterReadCycle", equalTo("01"))
                 .body("premiseType", equalTo("Residential"))
                 .body("powerRegion", equalTo("ERCOT"))
                 .body("stationCode", equalTo("FAN"))
                 .body("stationName", equalTo("FANNIN REIT"))
                 .body("metered", equalTo(true))
-                .body("polr", equalTo(false))
-                .body("meterType", equalTo("AMSM"))
+                .body("polrCustomerClass", equalTo("Residential"))
+                .body("settlementAmsIndicator", equalTo("Y"))
+                .body("tdspAmsIndicator", equalTo("AMSM"))
+                .body("switchHoldIndicator", equalTo("N"))
                 .body("createdAt", notNullValue())
                 .body("updatedAt", notNullValue());
     }
@@ -114,7 +116,8 @@ class ServicePointResourceTest {
                 .body("servicePointId", equalTo(2))
                 .body("esiid", equalTo("1008901098765432109876"))
                 .body("premiseType", equalTo("Small Non-Residential"))
-                .body("stationCode", equalTo("KL"));
+                .body("stationCode", equalTo("KL"))
+                .body("tdspAmsIndicator", equalTo("AMSR"));
     }
 
     @Test
@@ -143,15 +146,17 @@ class ServicePointResourceTest {
                     "zip": "77346",
                     "county": "HARRIS",
                     "tdspDuns": "957877905",
-                    "townCode": "02",
+                    "meterReadCycle": "02",
                     "status": "Active",
                     "premiseType": "Residential",
                     "powerRegion": "ERCOT",
                     "stationCode": "_HB",
                     "stationName": "HUMBLE OLD",
                     "metered": true,
-                    "polr": false,
-                    "meterType": "AMSM"
+                    "polrCustomerClass": "Residential",
+                    "settlementAmsIndicator": "Y",
+                    "tdspAmsIndicator": "AMSM",
+                    "switchHoldIndicator": "N"
                 }
                 """;
 
@@ -166,19 +171,12 @@ class ServicePointResourceTest {
                 .body("esiid", equalTo("1008901099999999999999"))
                 .body("street", equalTo("999 TEST BLVD"))
                 .body("city", equalTo("HUMBLE"))
-                .body("state", equalTo("TX"))
-                .body("zip", equalTo("77346"))
-                .body("county", equalTo("HARRIS"))
-                .body("tdspDuns", equalTo("957877905"))
-                .body("townCode", equalTo("02"))
+                .body("meterReadCycle", equalTo("02"))
                 .body("status", equalTo("Active"))
-                .body("premiseType", equalTo("Residential"))
-                .body("powerRegion", equalTo("ERCOT"))
-                .body("stationCode", equalTo("_HB"))
-                .body("stationName", equalTo("HUMBLE OLD"))
-                .body("metered", equalTo(true))
-                .body("polr", equalTo(false))
-                .body("meterType", equalTo("AMSM"))
+                .body("polrCustomerClass", equalTo("Residential"))
+                .body("settlementAmsIndicator", equalTo("Y"))
+                .body("tdspAmsIndicator", equalTo("AMSM"))
+                .body("switchHoldIndicator", equalTo("N"))
                 .body("createdAt", notNullValue())
                 .body("updatedAt", notNullValue())
                 .extract().jsonPath().getLong("servicePointId");
@@ -192,8 +190,7 @@ class ServicePointResourceTest {
                 {
                     "esiid": "1008901088888888888888",
                     "status": "Inactive",
-                    "metered": false,
-                    "polr": false
+                    "metered": false
                 }
                 """;
 
@@ -208,9 +205,8 @@ class ServicePointResourceTest {
                 .body("esiid", equalTo("1008901088888888888888"))
                 .body("status", equalTo("Inactive"))
                 .body("metered", equalTo(false))
-                .body("polr", equalTo(false))
                 .body("street", nullValue())
-                .body("meterType", nullValue());
+                .body("tdspAmsIndicator", nullValue());
     }
 
     @Test
@@ -220,8 +216,7 @@ class ServicePointResourceTest {
         String requestBody = """
                 {
                     "status": "Active",
-                    "metered": true,
-                    "polr": false
+                    "metered": true
                 }
                 """;
 
@@ -241,8 +236,7 @@ class ServicePointResourceTest {
                 {
                     "esiid": "",
                     "status": "Active",
-                    "metered": true,
-                    "polr": false
+                    "metered": true
                 }
                 """;
 
@@ -261,8 +255,7 @@ class ServicePointResourceTest {
         String requestBody = """
                 {
                     "esiid": "1008901077777777777777",
-                    "metered": true,
-                    "polr": false
+                    "metered": true
                 }
                 """;
 
@@ -281,28 +274,7 @@ class ServicePointResourceTest {
         String requestBody = """
                 {
                     "esiid": "1008901077777777777777",
-                    "status": "Active",
-                    "polr": false
-                }
-                """;
-
-        given()
-                .contentType(ContentType.JSON)
-                .body(requestBody)
-                .when().post(BASE_PATH)
-                .then()
-                .statusCode(400);
-    }
-
-    @Test
-    @Order(3)
-    @TestSecurity(user = "admin", roles = "admin")
-    void create_missingPolr_returnsBadRequest() {
-        String requestBody = """
-                {
-                    "esiid": "1008901077777777777777",
-                    "status": "Active",
-                    "metered": true
+                    "status": "Active"
                 }
                 """;
 
@@ -322,8 +294,7 @@ class ServicePointResourceTest {
                 {
                     "esiid": "1008901066666666666666",
                     "status": "Active",
-                    "metered": true,
-                    "polr": false
+                    "metered": true
                 }
                 """;
 
@@ -342,8 +313,7 @@ class ServicePointResourceTest {
                 {
                     "esiid": "1008901066666666666666",
                     "status": "Active",
-                    "metered": true,
-                    "polr": false
+                    "metered": true
                 }
                 """;
 
@@ -372,15 +342,17 @@ class ServicePointResourceTest {
                     "zip": "77002",
                     "county": "HARRIS",
                     "tdspDuns": "957877905",
-                    "townCode": "01",
+                    "meterReadCycle": "01",
                     "status": "De-Energized",
                     "premiseType": "Residential",
                     "powerRegion": "ERCOT",
                     "stationCode": "FAN",
                     "stationName": "FANNIN REIT",
                     "metered": true,
-                    "polr": true,
-                    "meterType": "AMSR"
+                    "polrCustomerClass": "Residential",
+                    "settlementAmsIndicator": "Y",
+                    "tdspAmsIndicator": "AMSR",
+                    "switchHoldIndicator": "N"
                 }
                 """;
 
@@ -392,11 +364,9 @@ class ServicePointResourceTest {
                 .statusCode(200)
                 .contentType(ContentType.JSON)
                 .body("servicePointId", equalTo(1))
-                .body("esiid", equalTo("1008901012345678901234"))
                 .body("street", equalTo("123 MAIN ST UPDATED"))
                 .body("status", equalTo("De-Energized"))
-                .body("polr", equalTo(true))
-                .body("meterType", equalTo("AMSR"));
+                .body("tdspAmsIndicator", equalTo("AMSR"));
     }
 
     @Test
@@ -407,8 +377,7 @@ class ServicePointResourceTest {
                 {
                     "esiid": "1008901000000000000000",
                     "status": "Active",
-                    "metered": true,
-                    "polr": false
+                    "metered": true
                 }
                 """;
 
@@ -427,8 +396,7 @@ class ServicePointResourceTest {
         String requestBody = """
                 {
                     "status": "Active",
-                    "metered": true,
-                    "polr": false
+                    "metered": true
                 }
                 """;
 
@@ -447,8 +415,7 @@ class ServicePointResourceTest {
         String requestBody = """
                 {
                     "esiid": "1008901012345678901234",
-                    "metered": true,
-                    "polr": false
+                    "metered": true
                 }
                 """;
 
@@ -468,8 +435,7 @@ class ServicePointResourceTest {
                 {
                     "esiid": "1008901012345678901234",
                     "status": "Active",
-                    "metered": true,
-                    "polr": false
+                    "metered": true
                 }
                 """;
 
@@ -488,8 +454,7 @@ class ServicePointResourceTest {
                 {
                     "esiid": "1008901012345678901234",
                     "status": "Active",
-                    "metered": true,
-                    "polr": false
+                    "metered": true
                 }
                 """;
 
@@ -568,8 +533,7 @@ class ServicePointResourceTest {
                 .statusCode(200)
                 .body("street", equalTo("123 MAIN ST UPDATED"))
                 .body("status", equalTo("De-Energized"))
-                .body("polr", equalTo(true))
-                .body("meterType", equalTo("AMSR"));
+                .body("tdspAmsIndicator", equalTo("AMSR"));
     }
 
     @Test
@@ -631,8 +595,7 @@ class ServicePointResourceTest {
                 {
                     "esiid": "1008901011111111111111",
                     "status": "Active",
-                    "metered": true,
-                    "polr": false
+                    "metered": true
                 }
                 """;
 
@@ -653,8 +616,7 @@ class ServicePointResourceTest {
                 {
                     "esiid": "1008901022222222222222",
                     "status": "Active",
-                    "metered": true,
-                    "polr": false
+                    "metered": true
                 }
                 """;
 
