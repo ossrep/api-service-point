@@ -1,4 +1,4 @@
-package com.ossrep.servicepoint.tdsp;
+package com.ossrep.servicepoint.repository;
 
 import java.util.Optional;
 

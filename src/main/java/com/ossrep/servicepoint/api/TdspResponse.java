@@ -1,6 +1,8 @@
-package com.ossrep.servicepoint.tdsp;
+package com.ossrep.servicepoint.api;
 
 import java.time.Instant;
+
+import com.ossrep.servicepoint.service.Tdsp;
 
 public record TdspResponse(
         Long tdspId,

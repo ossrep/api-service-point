@@ -1,4 +1,4 @@
-package com.ossrep.servicepoint.iso;
+package com.ossrep.servicepoint.api;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-import com.ossrep.servicepoint.api.Roles;
+import com.ossrep.servicepoint.service.IsoService;
 
 @Path("/api/v1/isos")
 @Produces(MediaType.APPLICATION_JSON)

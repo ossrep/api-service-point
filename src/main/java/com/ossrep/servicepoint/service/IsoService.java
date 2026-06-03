@@ -1,10 +1,13 @@
-package com.ossrep.servicepoint.iso;
+package com.ossrep.servicepoint.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+
+import com.ossrep.servicepoint.repository.IsoEntity;
+import com.ossrep.servicepoint.repository.IsoRepository;
 
 @ApplicationScoped
 public class IsoService {

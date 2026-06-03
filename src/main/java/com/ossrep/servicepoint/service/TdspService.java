@@ -1,10 +1,13 @@
-package com.ossrep.servicepoint.tdsp;
+package com.ossrep.servicepoint.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+
+import com.ossrep.servicepoint.repository.TdspEntity;
+import com.ossrep.servicepoint.repository.TdspRepository;
 
 @ApplicationScoped
 public class TdspService {

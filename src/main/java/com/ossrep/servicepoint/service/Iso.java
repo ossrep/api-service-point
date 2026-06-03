@@ -1,4 +1,4 @@
-package com.ossrep.servicepoint.iso;
+package com.ossrep.servicepoint.service;
 
 import java.time.Instant;
 

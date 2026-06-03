@@ -1,4 +1,4 @@
-package com.ossrep.servicepoint.iso;
+package com.ossrep.servicepoint.repository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 

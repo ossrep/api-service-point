@@ -1,6 +1,8 @@
-package com.ossrep.servicepoint.iso;
+package com.ossrep.servicepoint.api;
 
 import java.time.Instant;
+
+import com.ossrep.servicepoint.service.Iso;
 
 public record IsoResponse(
         Long isoId,

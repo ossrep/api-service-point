@@ -1,4 +1,4 @@
-package com.ossrep.servicepoint.iso;
+package com.ossrep.servicepoint.repository;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -10,12 +10,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity(name = "Iso")
-@Table(name = "iso")
-public class IsoEntity {
+@Entity(name = "Tdsp")
+@Table(name = "tdsp")
+public class TdspEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "tdsp_id", nullable = false)
+    public Long tdspId;
+
     @Column(name = "iso_id", nullable = false)
     public Long isoId;
 
@@ -24,6 +27,9 @@ public class IsoEntity {
 
     @Column(name = "name", nullable = false)
     public String name;
+
+    @Column(name = "duns", unique = true)
+    public String duns;
 
     @Column(name = "description")
     public String description;
@@ -38,12 +44,12 @@ public class IsoEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IsoEntity that = (IsoEntity) o;
-        return Objects.equals(isoId, that.isoId);
+        TdspEntity that = (TdspEntity) o;
+        return Objects.equals(tdspId, that.tdspId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(isoId);
+        return Objects.hash(tdspId);
     }
 }
