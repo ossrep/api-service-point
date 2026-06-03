@@ -87,11 +87,11 @@ public class EsiidCsvParser {
         entity.state = clean(columns[4]);
         entity.zip = clean(columns[5]);
         entity.county = clean(columns[6]);
-        entity.tdspDuns = clean(columns[7]);
+        // columns[7] = DUNS (resolved to tdsp_id by IngestionService from the archive metadata)
         entity.meterReadCycle = clean(columns[8]);
         entity.status = clean(columns[9]);
         entity.premiseType = clean(columns[10]);
-        entity.powerRegion = clean(columns[11]);
+        // columns[11] = power_region (no longer stored; implied by TDSP→ISO relationship)
         entity.stationCode = clean(columns[12]);
         entity.stationName = clean(columns[13]);
         entity.metered = "Y".equalsIgnoreCase(clean(columns[14]));

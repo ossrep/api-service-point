@@ -21,6 +21,9 @@ public class ServicePointEntity {
     @Column(name = "service_point_id", nullable = false)
     public Long servicePointId;
 
+    @Column(name = "tdsp_id")
+    public Long tdspId;
+
     @NotBlank(message = "{servicePoint.esiid.notBlank}")
     @Column(name = "esiid", nullable = false, unique = true)
     public String esiid;
@@ -43,9 +46,6 @@ public class ServicePointEntity {
     @Column(name = "county")
     public String county;
 
-    @Column(name = "tdsp_duns")
-    public String tdspDuns;
-
     @Column(name = "meter_read_cycle")
     public String meterReadCycle;
 
@@ -55,9 +55,6 @@ public class ServicePointEntity {
 
     @Column(name = "premise_type")
     public String premiseType;
-
-    @Column(name = "power_region")
-    public String powerRegion;
 
     @Column(name = "station_code")
     public String stationCode;
@@ -114,9 +111,9 @@ public class ServicePointEntity {
         return "ServicePointEntity{" +
                 "servicePointId=" + servicePointId +
                 ", esiid='" + esiid + '\'' +
+                ", tdspId=" + tdspId +
                 ", status='" + status + '\'' +
                 ", premiseType='" + premiseType + '\'' +
-                ", stationCode='" + stationCode + '\'' +
                 '}';
     }
 }

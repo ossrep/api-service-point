@@ -15,11 +15,11 @@ import static org.hamcrest.Matchers.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ServicePointResourceTest {
 
-    private static final String BASE_PATH = "/api/service-points";
+    private static final String BASE_PATH = "/api/v1/service-points";
     private static Long createdServicePointId;
 
     // ========================================================================
-    // GET /api/service-points - List all
+    // GET /api/v1/service-points - List all
     // ========================================================================
 
     @Test
@@ -59,7 +59,7 @@ class ServicePointResourceTest {
     }
 
     // ========================================================================
-    // GET /api/service-points/{servicePointId} - Get by ID
+    // GET /api/v1/service-points/{servicePointId} - Get by ID
     // ========================================================================
 
     @Test
@@ -73,16 +73,15 @@ class ServicePointResourceTest {
                 .contentType(ContentType.JSON)
                 .body("servicePointId", equalTo(1))
                 .body("esiid", equalTo("1008901012345678901234"))
+                .body("tdspId", equalTo(1))
                 .body("status", equalTo("Active"))
                 .body("street", equalTo("123 MAIN ST"))
                 .body("city", equalTo("HOUSTON"))
                 .body("state", equalTo("TX"))
                 .body("zip", equalTo("77002"))
                 .body("county", equalTo("HARRIS"))
-                .body("tdspDuns", equalTo("957877905"))
                 .body("meterReadCycle", equalTo("01"))
                 .body("premiseType", equalTo("Residential"))
-                .body("powerRegion", equalTo("ERCOT"))
                 .body("stationCode", equalTo("FAN"))
                 .body("stationName", equalTo("FANNIN REIT"))
                 .body("metered", equalTo(true))
@@ -115,6 +114,7 @@ class ServicePointResourceTest {
                 .contentType(ContentType.JSON)
                 .body("servicePointId", equalTo(2))
                 .body("esiid", equalTo("1008901098765432109876"))
+                .body("tdspId", equalTo(1))
                 .body("premiseType", equalTo("Small Non-Residential"))
                 .body("stationCode", equalTo("KL"))
                 .body("tdspAmsIndicator", equalTo("AMSR"));
@@ -130,7 +130,7 @@ class ServicePointResourceTest {
     }
 
     // ========================================================================
-    // POST /api/service-points - Create
+    // POST /api/v1/service-points - Create
     // ========================================================================
 
     @Test
@@ -139,17 +139,16 @@ class ServicePointResourceTest {
     void create_validRequest_returnsCreated() {
         String requestBody = """
                 {
+                    "tdspId": 1,
                     "esiid": "1008901099999999999999",
                     "street": "999 TEST BLVD",
                     "city": "HUMBLE",
                     "state": "TX",
                     "zip": "77346",
                     "county": "HARRIS",
-                    "tdspDuns": "957877905",
                     "meterReadCycle": "02",
                     "status": "Active",
                     "premiseType": "Residential",
-                    "powerRegion": "ERCOT",
                     "stationCode": "_HB",
                     "stationName": "HUMBLE OLD",
                     "metered": true,
@@ -168,6 +167,7 @@ class ServicePointResourceTest {
                 .statusCode(201)
                 .contentType(ContentType.JSON)
                 .body("servicePointId", notNullValue())
+                .body("tdspId", equalTo(1))
                 .body("esiid", equalTo("1008901099999999999999"))
                 .body("street", equalTo("999 TEST BLVD"))
                 .body("city", equalTo("HUMBLE"))
@@ -206,6 +206,7 @@ class ServicePointResourceTest {
                 .body("status", equalTo("Inactive"))
                 .body("metered", equalTo(false))
                 .body("street", nullValue())
+                .body("tdspId", nullValue())
                 .body("tdspAmsIndicator", nullValue());
     }
 
@@ -326,7 +327,7 @@ class ServicePointResourceTest {
     }
 
     // ========================================================================
-    // PUT /api/service-points/{servicePointId} - Update
+    // PUT /api/v1/service-points/{servicePointId} - Update
     // ========================================================================
 
     @Test
@@ -335,17 +336,16 @@ class ServicePointResourceTest {
     void update_existingId_returnsOk() {
         String requestBody = """
                 {
+                    "tdspId": 1,
                     "esiid": "1008901012345678901234",
                     "street": "123 MAIN ST UPDATED",
                     "city": "HOUSTON",
                     "state": "TX",
                     "zip": "77002",
                     "county": "HARRIS",
-                    "tdspDuns": "957877905",
                     "meterReadCycle": "01",
                     "status": "De-Energized",
                     "premiseType": "Residential",
-                    "powerRegion": "ERCOT",
                     "stationCode": "FAN",
                     "stationName": "FANNIN REIT",
                     "metered": true,
@@ -364,6 +364,7 @@ class ServicePointResourceTest {
                 .statusCode(200)
                 .contentType(ContentType.JSON)
                 .body("servicePointId", equalTo(1))
+                .body("tdspId", equalTo(1))
                 .body("street", equalTo("123 MAIN ST UPDATED"))
                 .body("status", equalTo("De-Energized"))
                 .body("tdspAmsIndicator", equalTo("AMSR"));
@@ -467,7 +468,7 @@ class ServicePointResourceTest {
     }
 
     // ========================================================================
-    // DELETE /api/service-points/{servicePointId} - Delete
+    // DELETE /api/v1/service-points/{servicePointId} - Delete
     // ========================================================================
 
     @Test
@@ -636,5 +637,115 @@ class ServicePointResourceTest {
                 .when().get(BASE_PATH)
                 .then()
                 .statusCode(403);
+    }
+
+    // ========================================================================
+    // ISO endpoints - /api/v1/isos
+    // ========================================================================
+
+    @Test
+    @Order(1)
+    @TestSecurity(user = "testuser", roles = "user")
+    void listIsos_asUser_returnsOk() {
+        given()
+                .when().get("/api/v1/isos")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("$", hasSize(greaterThanOrEqualTo(1)))
+                .body("[0].isoId", equalTo(1))
+                .body("[0].code", equalTo("ERCOT"))
+                .body("[0].name", equalTo("Electric Reliability Council of Texas"));
+    }
+
+    @Test
+    @Order(1)
+    @TestSecurity(user = "testuser", roles = "user")
+    void getIsoById_existingId_returnsOk() {
+        given()
+                .when().get("/api/v1/isos/1")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("isoId", equalTo(1))
+                .body("code", equalTo("ERCOT"))
+                .body("name", equalTo("Electric Reliability Council of Texas"))
+                .body("createdAt", notNullValue())
+                .body("updatedAt", notNullValue());
+    }
+
+    @Test
+    @Order(1)
+    @TestSecurity(user = "testuser", roles = "user")
+    void getIsoById_nonExistingId_returnsNotFound() {
+        given()
+                .when().get("/api/v1/isos/999")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    @Order(1)
+    void listIsos_unauthenticated_returnsUnauthorized() {
+        given()
+                .when().get("/api/v1/isos")
+                .then()
+                .statusCode(401);
+    }
+
+    // ========================================================================
+    // TDSP endpoints - /api/v1/tdsps
+    // ========================================================================
+
+    @Test
+    @Order(1)
+    @TestSecurity(user = "testuser", roles = "user")
+    void listTdsps_asUser_returnsOk() {
+        given()
+                .when().get("/api/v1/tdsps")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("$", hasSize(greaterThanOrEqualTo(11)))
+                .body("find { it.code == 'CENTERPOINT' }.name", equalTo("CenterPoint Energy"))
+                .body("find { it.code == 'CENTERPOINT' }.duns", equalTo("957877905"))
+                .body("find { it.code == 'ONCOR_ELEC' }.name", equalTo("Oncor Electric Delivery"));
+    }
+
+    @Test
+    @Order(1)
+    @TestSecurity(user = "testuser", roles = "user")
+    void getTdspById_existingId_returnsOk() {
+        given()
+                .when().get("/api/v1/tdsps/1")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("tdspId", equalTo(1))
+                .body("isoId", equalTo(1))
+                .body("code", equalTo("CENTERPOINT"))
+                .body("name", equalTo("CenterPoint Energy"))
+                .body("duns", equalTo("957877905"))
+                .body("createdAt", notNullValue())
+                .body("updatedAt", notNullValue());
+    }
+
+    @Test
+    @Order(1)
+    @TestSecurity(user = "testuser", roles = "user")
+    void getTdspById_nonExistingId_returnsNotFound() {
+        given()
+                .when().get("/api/v1/tdsps/999")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    @Order(1)
+    void listTdsps_unauthenticated_returnsUnauthorized() {
+        given()
+                .when().get("/api/v1/tdsps")
+                .then()
+                .statusCode(401);
     }
 }

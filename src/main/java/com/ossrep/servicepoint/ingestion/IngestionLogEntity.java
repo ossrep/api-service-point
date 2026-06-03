@@ -19,14 +19,14 @@ public class IngestionLogEntity {
     @Column(name = "ingestion_log_id", nullable = false)
     public Long ingestionLogId;
 
+    @Column(name = "tdsp_id", nullable = false)
+    public Long tdspId;
+
     @Column(name = "file_name", nullable = false, unique = true)
     public String fileName;
 
     @Column(name = "file_type", nullable = false)
     public String fileType;
-
-    @Column(name = "tdsp", nullable = false)
-    public String tdsp;
 
     @Column(name = "record_count")
     public Long recordCount;

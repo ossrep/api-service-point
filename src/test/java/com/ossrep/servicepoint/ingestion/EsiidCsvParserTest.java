@@ -42,11 +42,10 @@ class EsiidCsvParserTest {
         assertEquals("TX", entity.state);
         assertEquals("77520", entity.zip);
         assertEquals("CHAMBERS", entity.county);
-        assertEquals("957877905", entity.tdspDuns);
+        // columns[7] (DUNS) and columns[11] (power_region) are skipped -- resolved by IngestionService
         assertEquals("19", entity.meterReadCycle);
         assertEquals("Active", entity.status);
         assertEquals("Small Non-Residential", entity.premiseType);
-        assertEquals("ERCOT", entity.powerRegion);
         assertEquals("_CD", entity.stationCode);
         assertEquals("CEDAR BAYOU OLD", entity.stationName);
         assertTrue(entity.metered);

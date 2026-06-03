@@ -52,6 +52,7 @@ public class ServicePointService {
     public Optional<ServicePoint> update(Long servicePointId, @Valid ServicePoint servicePoint) {
         return repository.findByIdOptional(servicePointId)
                 .map(entity -> {
+                    entity.tdspId = servicePoint.tdspId();
                     entity.esiid = servicePoint.esiid();
                     entity.street = servicePoint.street();
                     entity.streetLine2 = servicePoint.streetLine2();
@@ -59,11 +60,9 @@ public class ServicePointService {
                     entity.state = servicePoint.state();
                     entity.zip = servicePoint.zip();
                     entity.county = servicePoint.county();
-                    entity.tdspDuns = servicePoint.tdspDuns();
                     entity.meterReadCycle = servicePoint.meterReadCycle();
                     entity.status = servicePoint.status();
                     entity.premiseType = servicePoint.premiseType();
-                    entity.powerRegion = servicePoint.powerRegion();
                     entity.stationCode = servicePoint.stationCode();
                     entity.stationName = servicePoint.stationName();
                     entity.metered = servicePoint.metered();
@@ -105,6 +104,7 @@ public class ServicePointService {
     private ServicePoint toDomain(ServicePointEntity entity) {
         return new ServicePoint(
                 entity.servicePointId,
+                entity.tdspId,
                 entity.esiid,
                 entity.street,
                 entity.streetLine2,
@@ -112,11 +112,9 @@ public class ServicePointService {
                 entity.state,
                 entity.zip,
                 entity.county,
-                entity.tdspDuns,
                 entity.meterReadCycle,
                 entity.status,
                 entity.premiseType,
-                entity.powerRegion,
                 entity.stationCode,
                 entity.stationName,
                 entity.metered,
@@ -134,6 +132,7 @@ public class ServicePointService {
 
     private ServicePointEntity toEntity(ServicePoint domain) {
         ServicePointEntity entity = new ServicePointEntity();
+        entity.tdspId = domain.tdspId();
         entity.esiid = domain.esiid();
         entity.street = domain.street();
         entity.streetLine2 = domain.streetLine2();
@@ -141,11 +140,9 @@ public class ServicePointService {
         entity.state = domain.state();
         entity.zip = domain.zip();
         entity.county = domain.county();
-        entity.tdspDuns = domain.tdspDuns();
         entity.meterReadCycle = domain.meterReadCycle();
         entity.status = domain.status();
         entity.premiseType = domain.premiseType();
-        entity.powerRegion = domain.powerRegion();
         entity.stationCode = domain.stationCode();
         entity.stationName = domain.stationName();
         entity.metered = domain.metered();

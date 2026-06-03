@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record CreateServicePointRequest(
+        Long tdspId,
         @NotBlank(message = "{servicePoint.esiid.notBlank}")
         String esiid,
         String street,
@@ -12,12 +13,10 @@ public record CreateServicePointRequest(
         String state,
         String zip,
         String county,
-        String tdspDuns,
         String meterReadCycle,
         @NotNull(message = "{servicePoint.status.notNull}")
         String status,
         String premiseType,
-        String powerRegion,
         String stationCode,
         String stationName,
         @NotNull(message = "{servicePoint.metered.notNull}")

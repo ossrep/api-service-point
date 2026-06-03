@@ -26,7 +26,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import com.ossrep.servicepoint.service.ServicePoint;
 import com.ossrep.servicepoint.service.ServicePointService;
 
-@Path("/api/service-points")
+@Path("/api/v1/service-points")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Service Points", description = "Service Point management endpoints")
@@ -66,12 +66,7 @@ public class ServicePointResource {
     @APIResponse(responseCode = "201", description = "Service point created",
             content = @Content(schema = @Schema(implementation = ServicePointResponse.class)))
     public Response create(@Valid CreateServicePointRequest request) {
-        ServicePoint domain = toDomain(null, request.esiid(), request.street(), request.streetLine2(),
-                request.city(), request.state(), request.zip(), request.county(), request.tdspDuns(),
-                request.meterReadCycle(), request.status(), request.premiseType(), request.powerRegion(),
-                request.stationCode(), request.stationName(), request.metered(), request.openServiceOrders(),
-                request.polrCustomerClass(), request.settlementAmsIndicator(), request.tdspAmsIndicator(),
-                request.switchHoldIndicator(), request.meteredServiceType(), request.meteredServiceTypeDesc());
+        ServicePoint domain = toDomain(null, request);
         ServicePoint created = servicePointService.create(domain);
         return Response.status(Response.Status.CREATED)
                 .entity(ServicePointResponse.from(created))
@@ -87,12 +82,12 @@ public class ServicePointResource {
     @APIResponse(responseCode = "404", description = "Service point not found")
     public Response update(@PathParam("servicePointId") Long servicePointId,
                            @Valid UpdateServicePointRequest request) {
-        ServicePoint domain = toDomain(servicePointId, request.esiid(), request.street(), request.streetLine2(),
-                request.city(), request.state(), request.zip(), request.county(), request.tdspDuns(),
-                request.meterReadCycle(), request.status(), request.premiseType(), request.powerRegion(),
-                request.stationCode(), request.stationName(), request.metered(), request.openServiceOrders(),
-                request.polrCustomerClass(), request.settlementAmsIndicator(), request.tdspAmsIndicator(),
-                request.switchHoldIndicator(), request.meteredServiceType(), request.meteredServiceTypeDesc());
+        ServicePoint domain = toDomain(servicePointId, request.tdspId(), request.esiid(), request.street(),
+                request.streetLine2(), request.city(), request.state(), request.zip(), request.county(),
+                request.meterReadCycle(), request.status(), request.premiseType(), request.stationCode(),
+                request.stationName(), request.metered(), request.openServiceOrders(), request.polrCustomerClass(),
+                request.settlementAmsIndicator(), request.tdspAmsIndicator(), request.switchHoldIndicator(),
+                request.meteredServiceType(), request.meteredServiceTypeDesc());
         return servicePointService.update(servicePointId, domain)
                 .map(sp -> Response.ok(ServicePointResponse.from(sp)).build())
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
@@ -111,14 +106,24 @@ public class ServicePointResource {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
-    private ServicePoint toDomain(Long id, String esiid, String street, String streetLine2,
-                                  String city, String state, String zip, String county, String tdspDuns,
-                                  String meterReadCycle, String status, String premiseType, String powerRegion,
-                                  String stationCode, String stationName, Boolean metered, String openServiceOrders,
-                                  String polrCustomerClass, String settlementAmsIndicator, String tdspAmsIndicator,
-                                  String switchHoldIndicator, String meteredServiceType, String meteredServiceTypeDesc) {
-        return new ServicePoint(id, esiid, street, streetLine2, city, state, zip, county, tdspDuns,
-                meterReadCycle, status, premiseType, powerRegion, stationCode, stationName, metered,
+    private ServicePoint toDomain(Long id, CreateServicePointRequest r) {
+        return toDomain(id, r.tdspId(), r.esiid(), r.street(), r.streetLine2(), r.city(), r.state(),
+                r.zip(), r.county(), r.meterReadCycle(), r.status(), r.premiseType(), r.stationCode(),
+                r.stationName(), r.metered(), r.openServiceOrders(), r.polrCustomerClass(),
+                r.settlementAmsIndicator(), r.tdspAmsIndicator(), r.switchHoldIndicator(),
+                r.meteredServiceType(), r.meteredServiceTypeDesc());
+    }
+
+    private ServicePoint toDomain(Long id, Long tdspId, String esiid, String street, String streetLine2,
+                                  String city, String state, String zip, String county,
+                                  String meterReadCycle, String status, String premiseType,
+                                  String stationCode, String stationName, Boolean metered,
+                                  String openServiceOrders, String polrCustomerClass,
+                                  String settlementAmsIndicator, String tdspAmsIndicator,
+                                  String switchHoldIndicator, String meteredServiceType,
+                                  String meteredServiceTypeDesc) {
+        return new ServicePoint(id, tdspId, esiid, street, streetLine2, city, state, zip, county,
+                meterReadCycle, status, premiseType, stationCode, stationName, metered,
                 openServiceOrders, polrCustomerClass, settlementAmsIndicator, tdspAmsIndicator,
                 switchHoldIndicator, meteredServiceType, meteredServiceTypeDesc, null, null);
     }

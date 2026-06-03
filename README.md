@@ -46,7 +46,21 @@ podman build -f Containerfile -t api-service-point .
 
 ## REST Endpoints
 
-Base path: `/api/service-points`
+### ISOs - `/api/v1/isos`
+
+| Method | Path        | Roles       | Description      |
+| ------ | ----------- | ----------- | ---------------- |
+| `GET`  | `/`         | admin, user | List all ISOs    |
+| `GET`  | `/{isoId}`  | admin, user | Get ISO by ID    |
+
+### TDSPs - `/api/v1/tdsps`
+
+| Method | Path         | Roles       | Description       |
+| ------ | ------------ | ----------- | ----------------- |
+| `GET`  | `/`          | admin, user | List all TDSPs    |
+| `GET`  | `/{tdspId}`  | admin, user | Get TDSP by ID    |
+
+### Service Points - `/api/v1/service-points`
 
 | Method   | Path                | Roles       | Description               |
 | -------- | ------------------- | ----------- | ------------------------- |

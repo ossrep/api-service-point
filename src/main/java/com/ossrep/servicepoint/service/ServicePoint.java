@@ -4,6 +4,7 @@ import java.time.Instant;
 
 public record ServicePoint(
         Long servicePointId,
+        Long tdspId,
         String esiid,
         String street,
         String streetLine2,
@@ -11,11 +12,9 @@ public record ServicePoint(
         String state,
         String zip,
         String county,
-        String tdspDuns,
         String meterReadCycle,
         String status,
         String premiseType,
-        String powerRegion,
         String stationCode,
         String stationName,
         Boolean metered,
