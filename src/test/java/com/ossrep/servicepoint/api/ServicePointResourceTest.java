@@ -566,7 +566,7 @@ class ServicePointResourceTest {
 
     @Test
     @Order(10)
-    @TestSecurity(user = "cp-admin", roles = "centerpoint-service-point-admin")
+    @TestSecurity(user = "cp-admin", roles = "centerpoint-service-point-admin", augmentors = RoleMappingAugmentor.class)
     void listAll_asMappedExternalAdmin_returnsOk() {
         given()
                 .when().get(BASE_PATH)
@@ -578,7 +578,7 @@ class ServicePointResourceTest {
 
     @Test
     @Order(10)
-    @TestSecurity(user = "cp-user", roles = "centerpoint-service-point-user")
+    @TestSecurity(user = "cp-user", roles = "centerpoint-service-point-user", augmentors = RoleMappingAugmentor.class)
     void listAll_asMappedExternalUser_returnsOk() {
         given()
                 .when().get(BASE_PATH)
@@ -590,7 +590,7 @@ class ServicePointResourceTest {
 
     @Test
     @Order(10)
-    @TestSecurity(user = "exa-admin", roles = "exarep-service-point-admin")
+    @TestSecurity(user = "exa-admin", roles = "exarep-service-point-admin", augmentors = RoleMappingAugmentor.class)
     void create_asMappedExternalAdmin_returnsCreated() {
         String requestBody = """
                 {
@@ -611,7 +611,7 @@ class ServicePointResourceTest {
 
     @Test
     @Order(10)
-    @TestSecurity(user = "cp-user", roles = "centerpoint-service-point-user")
+    @TestSecurity(user = "cp-user", roles = "centerpoint-service-point-user", augmentors = RoleMappingAugmentor.class)
     void create_asMappedExternalUser_returnsForbidden() {
         String requestBody = """
                 {
@@ -631,7 +631,7 @@ class ServicePointResourceTest {
 
     @Test
     @Order(10)
-    @TestSecurity(user = "unknown-role", roles = "unmapped-external-role")
+    @TestSecurity(user = "unknown-role", roles = "unmapped-external-role", augmentors = RoleMappingAugmentor.class)
     void listAll_asUnmappedExternalRole_returnsForbidden() {
         given()
                 .when().get(BASE_PATH)

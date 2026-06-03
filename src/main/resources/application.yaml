@@ -14,7 +14,6 @@ quarkus:
     migrate-at-start: true
     locations: db/migration
   oidc:
-    auth-server-url: ${OIDC_AUTH_SERVER_URL:http://localhost:8180/realms/ossrep}
     client-id: ${OIDC_CLIENT_ID:api-service-point}
 
 app:
@@ -32,10 +31,6 @@ mp:
         value:
           serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer
 
-kafka:
-  bootstrap:
-    servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
-
 "%dev":
   quarkus:
     hibernate-orm:
@@ -45,6 +40,7 @@ kafka:
       locations: db/migration,db/testdata
     datasource:
       devservices:
+        image-name: registry.access.redhat.com/hi/postgresql:18
         port: 5430
     oidc:
       devservices:
@@ -56,7 +52,12 @@ kafka:
       locations: db/migration,db/testdata
 
 "%prod":
+  kafka:
+    bootstrap:
+      servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
   quarkus:
+    oidc:
+      auth-server-url: ${OIDC_AUTH_SERVER_URL:http://localhost:8180/realms/ossrep}
     datasource:
       jdbc:
         url: ${DATASOURCE_JDBC_URL:jdbc:postgresql://localhost:5432/servicepoint}
