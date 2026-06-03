@@ -25,7 +25,7 @@ Utility/energy service point management REST API built with Quarkus.
 JAVA_HOME=/usr/lib/jvm/java-25-openjdk ./mvnw quarkus:dev
 ```
 
-Dev Services will automatically start PostgreSQL (port 5430) and Kafka containers.
+Dev Services will automatically start PostgreSQL (port 5431) and Kafka containers.
 
 - API: [http://localhost:8080](http://localhost:8080)
 - OpenAPI: [http://localhost:8080/q/openapi](http://localhost:8080/q/openapi)

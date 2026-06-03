@@ -1,22 +1,26 @@
 package com.ossrep.servicepoint.api;
 
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.security.TestSecurity;
-import io.restassured.http.ContentType;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.security.TestSecurity;
+import io.restassured.http.ContentType;
 
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ServicePointResourceTest {
 
     private static final String BASE_PATH = "/api/v1/service-points";
-    private static Long createdServicePointId;
 
     // ========================================================================
     // GET /api/v1/service-points - List all
@@ -159,7 +163,7 @@ class ServicePointResourceTest {
                 }
                 """;
 
-        createdServicePointId = given()
+        given()
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when().post(BASE_PATH)

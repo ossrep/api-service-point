@@ -41,7 +41,7 @@ mp:
     datasource:
       devservices:
         image-name: registry.access.redhat.com/hi/postgresql:18
-        port: 5430
+        port: 5431
     oidc:
       devservices:
         enabled: true
