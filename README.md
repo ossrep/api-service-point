@@ -41,7 +41,7 @@ JAVA_HOME=/usr/lib/jvm/java-25-openjdk ./mvnw package
 
 ```shell
 JAVA_HOME=/usr/lib/jvm/java-25-openjdk ./mvnw package
-podman build -f Containerfile -t api-service-point .
+podman build -f Containerfile -t quay.io/ossrep/api-service-point .
 ```
 
 ## REST Endpoints
@@ -55,10 +55,10 @@ podman build -f Containerfile -t api-service-point .
 
 ### TDSPs - `/api/v1/tdsps`
 
-| Method | Path         | Roles       | Description       |
-| ------ | ------------ | ----------- | ----------------- |
-| `GET`  | `/`          | admin, user | List all TDSPs    |
-| `GET`  | `/{tdspId}`  | admin, user | Get TDSP by ID    |
+| Method | Path         | Roles       | Description                      |
+| ------ | ------------ | ----------- | -------------------------------- |
+| `GET`  | `/`          | admin, user | List all TDSPs (filter: `?code=`)|
+| `GET`  | `/{tdspId}`  | admin, user | Get TDSP by ID                   |
 
 ### Service Points - `/api/v1/service-points`
 
@@ -68,4 +68,13 @@ podman build -f Containerfile -t api-service-point .
 | `GET`    | `/{servicePointId}` | admin, user | Get service point by ID   |
 | `POST`   | `/`                 | admin       | Create a service point    |
 | `PUT`    | `/{servicePointId}` | admin       | Update a service point    |
+| `PUT`    | `/bulk`             | admin       | Bulk upsert by ESIID      |
 | `DELETE` | `/{servicePointId}` | admin       | Delete a service point    |
+
+### Ingestion Logs - `/api/v1/ingestion-logs`
+
+| Method | Path                  | Roles | Description                            |
+| ------ | --------------------- | ----- | -------------------------------------- |
+| `GET`  | `/`                   | admin | List logs (filter: `?fileName=`)       |
+| `POST` | `/`                   | admin | Create log entry (status=PROCESSING)   |
+| `PUT`  | `/{ingestionLogId}`   | admin | Update log status (COMPLETED/FAILED)   |

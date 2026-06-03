@@ -9,6 +9,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -32,13 +33,20 @@ public class TdspResource {
 
     @GET
     @RolesAllowed({Roles.ADMIN_ROLE, Roles.USER_ROLE})
-    @Operation(summary = "List all TDSPs")
+    @Operation(summary = "List all TDSPs, optionally filtered by code")
     @APIResponse(responseCode = "200", description = "List of TDSPs",
             content = @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = TdspResponse.class)))
-    public Response listAll() {
-        List<TdspResponse> responses = tdspService.listAll().stream()
-                .map(TdspResponse::from)
-                .toList();
+    public Response listAll(@QueryParam("code") String code) {
+        List<TdspResponse> responses;
+        if (code != null && !code.isBlank()) {
+            responses = tdspService.findByCode(code)
+                    .map(tdsp -> List.of(TdspResponse.from(tdsp)))
+                    .orElse(List.of());
+        } else {
+            responses = tdspService.listAll().stream()
+                    .map(TdspResponse::from)
+                    .toList();
+        }
         return Response.ok(responses).build();
     }
 

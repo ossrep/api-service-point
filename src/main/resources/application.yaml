@@ -22,14 +22,6 @@ app:
     centerpoint-service-point-admin: admin
     centerpoint-service-point-user: user
     exarep-service-point-admin: admin
-  ercot:
-    auth-url: ${ERCOT_AUTH_URL:https://ercotb2c.b2clogin.com/ercotb2c.onmicrosoft.com/B2C_1_PUBAPI-ROPC-FLOW/oauth2/v2.0/token}
-    username: ${ERCOT_USERNAME:}
-    password: ${ERCOT_PASSWORD:}
-    subscription-key: ${ERCOT_SUBSCRIPTION_KEY:}
-    archive-url: ${ERCOT_ARCHIVE_URL:https://api.ercot.com/api/public-reports/archive/ZP15-612}
-    cron: "0 30 6 * * ?"
-    enabled: ${ERCOT_INGESTION_ENABLED:false}
 
 mp:
   messaging:

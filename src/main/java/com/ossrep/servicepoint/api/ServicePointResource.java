@@ -93,6 +93,19 @@ public class ServicePointResource {
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
 
+    @PUT
+    @Path("/bulk")
+    @RolesAllowed({Roles.ADMIN_ROLE})
+    @Operation(summary = "Bulk upsert service points by ESIID")
+    @APIResponse(responseCode = "200", description = "Upsert complete")
+    public Response bulkUpsert(List<CreateServicePointRequest> requests) {
+        List<ServicePoint> domains = requests.stream()
+                .map(r -> toDomain(null, r))
+                .toList();
+        long count = servicePointService.bulkUpsert(domains);
+        return Response.ok("{\"upserted\":" + count + "}").build();
+    }
+
     @DELETE
     @Path("/{servicePointId}")
     @RolesAllowed({Roles.ADMIN_ROLE})
