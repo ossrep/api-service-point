@@ -65,6 +65,19 @@ public class ServicePointService {
                 .toList();
     }
 
+    public List<ServicePoint> listPaged(int page, int size) {
+        return repository.findAll()
+                .page(page, size)
+                .list()
+                .stream()
+                .map(this::toDomain)
+                .toList();
+    }
+
+    public long count() {
+        return repository.count();
+    }
+
     public Optional<ServicePoint> findById(Long servicePointId) {
         return repository.findByIdOptional(servicePointId)
                 .map(this::toDomain);

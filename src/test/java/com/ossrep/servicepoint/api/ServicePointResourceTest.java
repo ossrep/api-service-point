@@ -35,10 +35,14 @@ class ServicePointResourceTest {
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("$", hasSize(greaterThanOrEqualTo(3)))
-                .body("[0].servicePointId", notNullValue())
-                .body("[0].esiid", notNullValue())
-                .body("[0].status", notNullValue());
+                .body("content", hasSize(greaterThanOrEqualTo(3)))
+                .body("content[0].servicePointId", notNullValue())
+                .body("content[0].esiid", notNullValue())
+                .body("content[0].status", notNullValue())
+                .body("page", equalTo(0))
+                .body("size", equalTo(20))
+                .body("totalElements", greaterThanOrEqualTo(3))
+                .body("totalPages", greaterThanOrEqualTo(1));
     }
 
     @Test
@@ -50,7 +54,25 @@ class ServicePointResourceTest {
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("$", hasSize(greaterThanOrEqualTo(3)));
+                .body("content", hasSize(greaterThanOrEqualTo(3)));
+    }
+
+    @Test
+    @Order(1)
+    @TestSecurity(user = "testuser", roles = "user")
+    void listAll_withPageParams_returnsRequestedPage() {
+        given()
+                .queryParam("page", 0)
+                .queryParam("size", 2)
+                .when().get(BASE_PATH)
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("content", hasSize(2))
+                .body("page", equalTo(0))
+                .body("size", equalTo(2))
+                .body("totalElements", greaterThanOrEqualTo(3))
+                .body("totalPages", greaterThanOrEqualTo(2));
     }
 
     @Test
@@ -556,12 +578,13 @@ class ServicePointResourceTest {
     @TestSecurity(user = "admin", roles = "admin")
     void listAll_afterMutations_reflectsChanges() {
         given()
+                .queryParam("size", 500)
                 .when().get(BASE_PATH)
                 .then()
                 .statusCode(200)
-                .body("$", hasSize(greaterThanOrEqualTo(4)))
-                .body("find { it.servicePointId == 1 }.status", equalTo("De-Energized"))
-                .body("find { it.servicePointId == 3 }", nullValue());
+                .body("content", hasSize(greaterThanOrEqualTo(4)))
+                .body("content.find { it.servicePointId == 1 }.status", equalTo("De-Energized"))
+                .body("content.find { it.servicePointId == 3 }", nullValue());
     }
 
     // ========================================================================
@@ -577,7 +600,7 @@ class ServicePointResourceTest {
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("$", hasSize(greaterThanOrEqualTo(1)));
+                .body("content", hasSize(greaterThanOrEqualTo(1)));
     }
 
     @Test
@@ -589,7 +612,7 @@ class ServicePointResourceTest {
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("$", hasSize(greaterThanOrEqualTo(1)));
+                .body("content", hasSize(greaterThanOrEqualTo(1)));
     }
 
     @Test

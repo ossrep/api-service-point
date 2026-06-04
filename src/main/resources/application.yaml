@@ -15,6 +15,9 @@ quarkus:
     locations: db/migration
   oidc:
     client-id: ${OIDC_CLIENT_ID:api-service-point}
+  smallrye-openapi:
+    security-scheme: jwt
+    security-scheme-name: bearer
 
 app:
   role-mapping:

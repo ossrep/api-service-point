@@ -7,12 +7,14 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -20,6 +22,7 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -37,14 +40,16 @@ public class ServicePointResource {
 
     @GET
     @RolesAllowed({Roles.ADMIN_ROLE, Roles.USER_ROLE})
-    @Operation(summary = "List all service points")
-    @APIResponse(responseCode = "200", description = "List of service points",
-            content = @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = ServicePointResponse.class)))
-    public Response listAll() {
-        List<ServicePointResponse> responses = servicePointService.listAll().stream()
+    @Operation(summary = "List service points (paged)")
+    @APIResponse(responseCode = "200", description = "Paged list of service points")
+    public Response listAll(
+            @Parameter(description = "Page number (0-based)") @QueryParam("page") @DefaultValue("0") int page,
+            @Parameter(description = "Page size") @QueryParam("size") @DefaultValue("20") int size) {
+        List<ServicePointResponse> content = servicePointService.listPaged(page, size).stream()
                 .map(ServicePointResponse::from)
                 .toList();
-        return Response.ok(responses).build();
+        long totalElements = servicePointService.count();
+        return Response.ok(PagedResponse.of(content, page, size, totalElements)).build();
     }
 
     @GET
